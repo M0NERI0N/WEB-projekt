@@ -1,0 +1,139 @@
+/* ROOTSINVEIN – podmořský "glass" vzhled */
+
+:root {
+    --deep-1: #0a4d6e;
+    --deep-2: #073552;
+    --deep-3: #031826;
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-bg-hover: rgba(255, 255, 255, 0.13);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --text: #e9f7fb;
+    --accent: #5fe0d0;
+}
+
+html {
+    min-height: 100%;
+    background: linear-gradient(180deg, var(--deep-1) 0%, var(--deep-2) 45%, var(--deep-3) 100%) fixed;
+}
+
+body {
+    min-height: 100vh;
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    line-height: 1.7;
+    background: transparent;
+    padding-bottom: 160px; /* místo nad mořským dnem */
+}
+
+/* Plátno s rybami a bublinami */
+#ocean {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Světelné paprsky shora */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+            radial-gradient(ellipse 60% 40% at 50% -5%, rgba(120, 230, 255, 0.28), transparent 70%),
+            repeating-linear-gradient(105deg, transparent 0 90px, rgba(255, 255, 255, 0.03) 90px 150px);
+    pointer-events: none;
+}
+
+/* Skleněný panel (průhledný, zaoblený) */
+.glass {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+            0 10px 32px rgba(0, 0, 0, 0.25),
+            inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.glass-card {
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+.glass-card:hover {
+    background: var(--glass-bg-hover);
+    animation-play-state: paused;
+}
+
+/* Plovoucí panely – jemně se vznášejí jako ve vodě */
+@keyframes drift {
+    0%, 100% { translate: 0 0;     rotate: 0deg; }
+    50%      { translate: 0 -12px; rotate: 0.4deg; }
+}
+@keyframes drift-soft {
+    0%, 100% { translate: 0 0; }
+    50%      { translate: 0 -6px; }
+}
+.glass-card { animation: drift 7s ease-in-out infinite; }
+aside .glass-card { animation-duration: 9s; animation-delay: -3s; }
+.glass-nav { animation: drift-soft 8s ease-in-out infinite; }
+
+/* Navigace */
+.glass-nav .navbar-brand img {
+    border-radius: 50%;
+    object-fit: cover;
+}
+.glass-nav .nav-link {
+    color: rgba(233, 247, 251, 0.8);
+    border-radius: 50rem;
+    padding: 0.4rem 1.1rem;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+.glass-nav .nav-link:hover,
+.glass-nav .nav-link:focus-visible {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.14);
+}
+.glass-nav .nav-link.active {
+    color: #04222f;
+    background: var(--accent);
+}
+
+/* Nadpisy a text */
+h1, h2 { letter-spacing: -0.01em; }
+
+.hero h1 {
+    background: linear-gradient(90deg, #fff, var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Tlačítko */
+.btn-glass {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--glass-border);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+.btn-glass:hover {
+    color: #04222f;
+    background: var(--accent);
+    transform: translateY(-1px);
+}
+
+a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+/* Menu na mobilu */
+@media (max-width: 575.98px) {
+    .glass-nav { border-radius: 2rem !important; }
+}
+
+/* Když prohlížeč nepodporuje rozmazání, panely budou o trochu tmavší */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass { background: rgba(4, 30, 48, 0.75); }
+}
